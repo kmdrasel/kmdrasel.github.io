@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Water Quality Assessment - Research Project</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #1e3a5f;
+            --accent-color: #4a90e2;
+            --text-light: #6c757d;
+            --bg-light: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+        }
+
+        .hero-section {
+            background-image: 
+                linear-gradient(rgba(44, 90, 160, 0.7), rgba(30, 58, 95, 0.7)),
+                url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExYWE2eDhud29wZW9lNjA4ZDRsOXp3YmxkczRwcDNsYTJnYzJ0MGM2NiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/Q5idwzxmoRkBdiEVpu/giphy.gif');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="water" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M0,50 Q25,30 50,50 T100,50" stroke="rgba(255,255,255,0.1)" fill="none"/></pattern></defs><rect width="100" height="100" fill="url(%23water)"/></svg>');
+            opacity: 0.1;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: none;
+            overflow: hidden;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 2px;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 2rem;
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border-radius: 10px;
+            border: 1px solid #e9ecef;
+            height: 100%;
+        }
+
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .methodology-step {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 1rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .parameter-badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            margin: 0.2rem;
+            display: inline-block;
+        }
+
+        .equipment-item {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+            height: 100%;
+        }
+
+        .equipment-item img {
+            max-height: 120px;
+            object-fit: contain;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            transform: translateY(0);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--accent-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2rem;
+            top: 1.5rem;
+            width: 12px;
+            height: 12px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            border: 3px solid white;
+            box-shadow: 0 0 0 3px var(--accent-color);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .result-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+
+        .wqi-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #dc3545;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-download {
+            background: var(--primary-color);
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-download:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(44, 90, 160, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .hero-section {
+                padding: 60px 0;
+            }
+            
+            .stats-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <h1 class="display-4 fw-bold mb-4">
+                        An Assessment of the Water Quality Index of the Dhaleshwari and Turag Rivers
+                    </h1>
+                    <p class="lead mb-4">
+                        A comprehensive environmental engineering research project analyzing water pollution levels and quality parameters in two major rivers of Bangladesh using advanced laboratory techniques and WQI methodology.
+                    </p>
+                    <div class="d-flex flex-wrap gap-3 mb-4">
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="fas fa-flask me-2"></i>19 Parameters Tested
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="fas fa-map-marker-alt me-2"></i>4 Sampling Points
+                        </span>
+                        <span class="badge bg-light text-dark px-3 py-2">
+                            <i class="fas fa-calendar me-2"></i>March 2021 - March 2022
+                        </span>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-left">
+                    <div class="text-center">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjZjhmOWZhIi8+CjxwYXRoIGQ9Ik03NSAxNTBDNzUgMTAwIDEwMCA3NSAxNTAgNzVDMjAwIDc1IDIyNSAxMDAgMjI1IDE1MEMyMjUgMjAwIDIwMCAyMjUgMTUwIDIyNUMxMDAgMjI1IDc1IDIwMCA3NSAxNTBaIiBmaWxsPSIjNGE5MGUyIiBmaWxsLW9wYWNpdHk9IjAuMiIvPgo8Y2lyY2xlIGN4PSIxNTAiIGN5PSIxNTAiIHI9IjQwIiBmaWxsPSIjMmM1YWEwIi8+CjxwYXRoIGQ9Ik0xMzAgMTUwSDE3ME0xNTAgMTMwVjE3ME0xMjAgMTIwTDE4MDE4ME0xMjAgMTgwTDE4MDEyMCIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KPC9zdmc+" 
+                             alt="Water Quality Research" class="img-fluid rounded shadow">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Overview -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8" data-aos="fade-up">
+                    <h2 class="section-title">Project Overview</h2>
+                    <div class="project-card p-4 mb-4">
+                        <h4 class="text-primary mb-3">Research Objective</h4>
+                        <p>This comprehensive study focuses on evaluating the surface water quality of two major rivers in Bangladesh - the Turag and Dhaleshwari rivers. The research aims to determine pollution levels through systematic analysis of physicochemical parameters and calculate Water Quality Index (WQI) values to assess water suitability for various uses.</p>
+                        
+                        <h4 class="text-primary mb-3 mt-4">Key Research Questions</h4>
+                        <ul>
+                            <li>What are the current pollution levels in Turag and Dhaleshwari rivers?</li>
+                            <li>How do upstream and downstream water quality parameters compare?</li>
+                            <li>What are the main sources of contamination affecting these water bodies?</li>
+                            <li>Is the water suitable for domestic, agricultural, or industrial use?</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-left">
+                    <div class="project-card p-4">
+                        <h4 class="text-primary mb-3">Project Details</h4>
+                        <table class="table table-borderless">
+                            <tr>
+                                <td><strong>Institution:</strong></td>
+                                <td>Bangladesh University of Engineering and Technology (BUET)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Department:</strong></td>
+                                <td>Civil Engineering</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Degree:</strong></td>
+                                <td>Bachelor of Science</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Authors:</strong></td>
+                                <td>Khandokar Md Rasel</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Supervisor:</strong></td>
+                                <td>Dr. Rowshan Mamtaz</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Duration:</strong></td>
+                                <td>12 months</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics Section -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5" data-aos="fade-up">Project Statistics</h2>
+            <div class="row">
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="stats-card">
+                        <div class="stats-number">19</div>
+                        <h5>Parameters Analyzed</h5>
+                        <p class="text-muted">Comprehensive physicochemical analysis</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="stats-card">
+                        <div class="stats-number">4</div>
+                        <h5>Sampling Locations</h5>
+                        <p class="text-muted">Strategic upstream & downstream points</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="stats-card">
+                        <div class="stats-number">84.7</div>
+                        <h5>Average WQI Score</h5>
+                        <p class="text-muted">Very Poor water quality classification</p>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stats-card">
+                        <div class="stats-number">12</div>
+                        <h5>Months Duration</h5>
+                        <p class="text-muted">Comprehensive research timeline</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Study Areas -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Study Areas & Sampling Locations</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-4" data-aos="fade-right">
+                    <div class="project-card p-4 h-100">
+                        <h4 class="text-primary mb-3">
+                            <i class="fas fa-water me-2"></i>Turag River
+                        </h4>
+                        <p><strong>Length:</strong> 62 kilometers<br>
+                        <strong>Average Depth:</strong> 13.5 meters<br>
+                        <strong>Location:</strong> Northwest Dhaka City</p>
+                        
+                        <h5 class="mt-4 mb-3">Sampling Points:</h5>
+                        <div class="methodology-step">
+                            <strong>1. Diyabari Point (Upstream)</strong>
+                            <p class="mb-0">Mainstream location representing source conditions</p>
+                        </div>
+                        <div class="methodology-step">
+                            <strong>2. Aminbazar Point (Downstream)</strong>
+                            <p class="mb-0">Near Aminbazar bridge where Turag meets Buriganga</p>
+                        </div>
+                        
+                        <h5 class="mt-4 mb-3">Major Pollution Sources:</h5>
+                        <ul>
+                            <li>Garment manufacturing industries</li>
+                            <li>Metal and dyeing industries</li>
+                            <li>Pharmaceutical factories</li>
+                            <li>Chemical and battery factories</li>
+                            <li>Urban and agricultural runoff</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6 mb-4" data-aos="fade-left">
+                    <div class="project-card p-4 h-100">
+                        <h4 class="text-primary mb-3">
+                            <i class="fas fa-water me-2"></i>Dhaleshwari River
+                        </h4>
+                        <p><strong>Length:</strong> 160 kilometers<br>
+                        <strong>Average Depth:</strong> 37 meters<br>
+                        <strong>Location:</strong> Central Dhaka, Jamuna tributary</p>
+                        
+                        <h5 class="mt-4 mb-3">Sampling Points:</h5>
+                        <div class="methodology-step">
+                            <strong>1. Dhaleshwari Bridge Point (Upstream)</strong>
+                            <p class="mb-0">Savar-Manikganj highway location</p>
+                        </div>
+                        <div class="methodology-step">
+                            <strong>2. Kadamtoli Point (Downstream)</strong>
+                            <p class="mb-0">Near Alipur-Kadamtoli bridge</p>
+                        </div>
+                        
+                        <h5 class="mt-4 mb-3">Major Pollution Sources:</h5>
+                        <ul>
+                            <li>Tannery Industrial Estate</li>
+                            <li>Central Effluent Treatment Plant waste</li>
+                            <li>Municipal sewage and surface runoff</li>
+                            <li>Industrial effluents from Savar</li>
+                            <li>Agricultural and domestic waste</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Field Work Gallery -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center" data-aos="fade-up">Field Work & Data Collection</h2>
+            <div class="image-gallery">
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="100">
+                    <img src="https://i.postimg.cc/7Lv827cq/1-Water-sample-collection.jpg" alt="Environmental engineer collecting water samples at riverbank">
+                    <div class="gallery-overlay">
+                        <h5>Water Sample Collection</h5>
+                        <p>Professional sampling techniques using sterile containers and proper protocols</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="200">
+                    <img src="https://i.postimg.cc/rpS6CsXx/2-Pollution-assessment.jpg" alt="Heavily polluted riverbank with waste and debris">
+                    <div class="gallery-overlay">
+                        <h5>Pollution Assessment</h5>
+                        <p>Visual documentation of severe pollution levels and waste accumulation</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="300">
+                    <img src="https://i.postimg.cc/qR0Pmr4Y/3-Industrial-discharge-documentation.jpg" alt="Industrial waste discharge pipe into polluted water">
+                    <div class="gallery-overlay">
+                        <h5>Industrial Discharge Points</h5>
+                        <p>Identification and documentation of major contamination sources</p>
+                    </div>
+                </div>
+                <div class="gallery-item" data-aos="zoom-in" data-aos-delay="400">
+                    <img src="https://i.postimg.cc/4yxrg1KQ/4-Environmental-degradation-evidence.jpg" alt="Contaminated river with dark water and industrial background">
+                    <div class="gallery-overlay">
+                        <h5>Water Quality Deterioration</h5>
+                        <p>Visual evidence of severe water contamination and environmental degradation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Laboratory Analysis -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Laboratory Analysis & Equipment</h2>
+            
+            <!-- Parameters Tested -->
+            <div class="row mb-5">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <div class="project-card p-4">
+                        <h4 class="text-primary mb-3">Water Quality Parameters Analyzed</h4>
+                        <p class="mb-4">A comprehensive analysis of 19 physicochemical parameters was conducted to evaluate water quality according to international standards:</p>
+                        
+                        <h5 class="mb-3">Physical Parameters:</h5>
+                        <div class="mb-3">
+                            <span class="parameter-badge">pH</span>
+                            <span class="parameter-badge">Turbidity</span>
+                            <span class="parameter-badge">Color</span>
+                            <span class="parameter-badge">Total Dissolved Solids (TDS)</span>
+                            <span class="parameter-badge">Total Suspended Solids (TSS)</span>
+                            <span class="parameter-badge">Electrical Conductivity (EC)</span>
+                        </div>
+                        
+                        <h5 class="mb-3">Chemical Parameters:</h5>
+                        <div class="mb-3">
+                            <span class="parameter-badge">Dissolved Oxygen (DO)</span>
+                            <span class="parameter-badge">Chemical Oxygen Demand (COD)</span>
+                            <span class="parameter-badge">Ammonia-Nitrogen</span>
+                            <span class="parameter-badge">Nitrate-Nitrogen</span>
+                            <span class="parameter-badge">Hydrogen Sulfide</span>
+                            <span class="parameter-badge">Chloride</span>
+                            <span class="parameter-badge">Sulfate</span>
+                            <span class="parameter-badge">Phosphate</span>
+                        </div>
+                        
+                        <h5 class="mb-3">Heavy Metals:</h5>
+                        <div>
+                            <span class="parameter-badge">Iron (Fe)</span>
+                            <span class="parameter-badge">Manganese (Mn)</span>
+                            <span class="parameter-badge">Cadmium (Cd)</span>
+                            <span class="parameter-badge">Chromium (Cr)</span>
+                            <span class="parameter-badge">Lead (Pb)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-left">
+                    <div class="project-card p-4">
+                        <h4 class="text-primary mb-3">Analysis Standards</h4>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>ECR 1997 Standards</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>USEPA Guidelines</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>EU Directive 2001</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>WHO Standards</li>
+                            <li class="mb-2"><i class="fas fa-check text-success me-2"></i>Standard Methods (SM)</li>
+                        </ul>
+                        
+                        <h5 class="text-primary mt-4 mb-3">Quality Assurance</h5>
+                        <ul class="list-unstyled">
+                            <li class="mb-2"><i class="fas fa-microscope text-info me-2"></i>Duplicate Analysis</li>
+                            <li class="mb-2"><i class="fas fa-vial text-info me-2"></i>Blank Controls</li>
+                            <li class="mb-2"><i class="fas fa-chart-line text-info me-2"></i>Calibration Standards</li>
+                            <li class="mb-2"><i class="fas fa-shield-alt text-info me-2"></i>QC Protocols</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Laboratory Equipment -->
+            <h3 class="text-primary mb-4" data-aos="fade-up">Advanced Laboratory Equipment Used</h3>
+            <div class="row">
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="equipment-item">
+                        <img src="https://i.postimg.cc/26wPMt55/5-Dissolved-oxygen-meters.jpg" alt="Dissolved Oxygen Meter" class="img-fluid">
+                        <h6>Dissolved Oxygen Meter</h6>
+                        <small class="text-muted">SPER Scientific DO Meter for precise oxygen measurement</small>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="equipment-item">
+                        <img src="https://i.postimg.cc/65TDbYx9/9-Multi-parameter-testing-equipment.png" alt="Multi-parameter Water Quality Meter" class="img-fluid">
+                        <h6>pH/Temperature Meter</h6>
+                        <small class="text-muted">BIOBASE multi-parameter meter for pH and temperature analysis</small>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="equipment-item">
+                        <img src="https://i.postimg.cc/0jXh2JDR/6-Modern-dissolved-oxygen-meters.jpg" alt="Laboratory Dissolved Oxygen Testing Setup" class="img-fluid">
+                        <h6>Laboratory DO Setup</h6>
+                        <small class="text-muted">Labotronics professional laboratory dissolved oxygen analysis system</small>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="400">
+                    <div class="equipment-item">
+                        <img src="https://i.postimg.cc/SQgBGH5T/10-Professional-laboratory-setup.jpg" alt="Environmental Analysis Laboratory" class="img-fluid">
+                        <h6>Analysis Laboratory</h6>
+                        <small class="text-muted">Fully equipped environmental engineering laboratory facility</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Equipment Row -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="500">
+                    <div class="equipment-item">
+                        <img src="https://i.postimg.cc/dVygw30p/7-Portable-dissolved-oxygen-meter.png" alt="Portable Dissolved Oxygen Meter" class="img-fluid">
+                        <h6>Portable DO Meter</h6>
+                        <small class="text-muted">Field-portable dissolved oxygen measurement device</small>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-4" data-aos="fade-up" data-aos-delay="600">
+                    <div class="equipment-item">
+                        <img src="https://i.postimg.cc/BQyRrHJ2/8-Waterproof-dissolved-oxygen-meter.png" alt="Waterproof Dissolved Oxygen Meter" class="img-fluid">
+                        <h6>Waterproof DO Meter</h6>
+                        <small class="text-muted">Rugged waterproof design for field measurements</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Equipment List -->
+            <div class="row mt-4">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="project-card p-4">
+                        <h5 class="text-primary mb-3">Major Analytical Instruments</h5>
+                        <ul>
+                            <li><strong>DR 2010 UV Spectrophotometer</strong> - COD, Color, Ammonia, H₂S, Phosphate analysis</li>
+                            <li><strong>AA-7000 Atomic Absorption Spectrophotometer</strong> - Heavy metals (Cr, Cd, Pb, Cu)</li>
+                            <li><strong>Shimadzu AA-6800 FLAAS</strong> - Iron and Manganese analysis</li>
+                            <li><strong>WTW Probes</strong> - pH, DO, and EC measurements</li>
+                            <li><strong>HACH Turbidity Meter</strong> - Turbidity measurements</li>
+                            <li><strong>Digital Titrator</strong> - Chloride analysis</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="project-card p-4">
+                        <h5 class="text-primary mb-3">Analytical Methods Applied</h5>
+                        <ul>
+                            <li><strong>Standard Methods (SM)</strong> - pH, DO, Color, Turbidity, EC, TDS</li>
+                            <li><strong>USEPA Methods</strong> - Heavy metals analysis (200.9, 213.2)</li>
+                            <li><strong>Spectrophotometric Methods</strong> - COD, Nutrients, H₂S</li>
+                            <li><strong>Titrimetric Analysis</strong> - Chloride determination</li>
+                            <li><strong>Gravimetric Methods</strong> - TSS and TDS analysis</li>
+                            <li><strong>Atomic Absorption</strong> - Trace metal analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methodology Timeline -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title" data-aos="fade-up">Research Methodology Timeline</h2>
+            <div class="row">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Problem Identification</h5>
+                            <p><strong>March 2021</strong></p>
+                            <ul>
+                                <li>Identification of water quality issues in Dhaka's river systems</li>
+                                <li>Research gap analysis and problem statement formulation</li>
+                                <li>Initial scope definition and research question development</li>
+                                <li>Supervisor consultation and research proposal preparation</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Literature Review</h5>
+                            <p><strong>April - May 2021</strong></p>
+                            <ul>
+                                <li>Comprehensive review of water quality assessment methods</li>
+                                <li>Study of previous research on Turag and Dhaleshwari rivers</li>
+                                <li>Analysis of WQI calculation methodologies and standards</li>
+                                <li>Review of national and international water quality guidelines</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Methodology Development</h5>
+                            <p><strong>June - July 2021</strong></p>
+                            <ul>
+                                <li>Selection of water quality parameters for analysis</li>
+                                <li>Development of sampling strategy and protocols</li>
+                                <li>Laboratory method selection and validation</li>
+                                <li>WQI calculation framework establishment</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Site Selection & Survey</h5>
+                            <p><strong>August - September 2021</strong></p>
+                            <ul>
+                                <li>Identification of strategic sampling locations</li>
+                                <li>Preliminary site assessment and documentation</li>
+                                <li>Pollution source mapping and analysis</li>
+                                <li>Permission and safety protocols establishment</li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Sample Collection</h5>
+                            <p><strong>October - November 2021</strong></p>
+                            <ul>
+                                <li>Professional water sampling using sterile containers</li>
+                                <li>GPS coordinates recording for each sampling point</li>
+                                <li>Chain of custody documentation</li>
+                                <li>Immediate preservation and transportation to laboratory</li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Laboratory Analysis</h5>
+                            <p><strong>December 2021 - January 2022</strong></p>
+                            <ul>
+                                <li>Physical parameter analysis (pH, turbidity, color, etc.)</li>
+                                <li>Chemical analysis (DO, COD, nutrients, etc.)</li>
+                                <li>Heavy metals analysis using AAS</li>
+                                <li>Quality control and duplicate analysis</li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Data Analysis & WQI Calculation</h5>
+                            <p><strong>February 2022</strong></p>
+                            <ul>
+                                <li>Weighted Arithmetic Index Method application</li>
+                                <li>Statistical analysis and data interpretation</li>
+                                <li>Comparison with national and international standards</li>
+                                <li>Result validation and peer review</li>
+                            </ul>
+                        </div>
+
+                        <div class="timeline-item">
+                            <h5 class="text-primary">Thesis Completion</h5>
+                            <p><strong>March 2022</strong></p>
+                            <ul>
+                                <li>Final thesis writing and documentation</li>
+                                <li>Results compilation and discussion</li>
+                                <li>Conclusions and recommendations formulation</li>
+                                <li>Thesis defense and final submission</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-left">
+                    <div class="project-card p-4">
+                        <h4 class="text-primary mb-3">WQI Calculation Method</h4>
+                        <p><strong>Weighted Arithmetic Index Method:</strong></p>
+                        
+                        <div class="bg-light p-3 rounded mb-3">
+                            <code>
+                                WQI = Σ(Qᵢ × Wᵢ) / ΣWᵢ
+                            </code>
+                        </div>
+                        
+                        <p><strong>Where:</strong></p>
+                        <ul>
+                            <li><strong>Qᵢ:</strong> Quality rating scale</li>
+                            <li><strong>Wᵢ:</strong> Relative weight (1/Sᵢ)</li>
+                            <li><strong>Sᵢ:</strong> Standard permissible value</li>
+                            <li><strong>Vₙ:</strong> Actual parameter value</li>
+                            <li><strong>Vᵢ:</strong> Ideal parameter value</li>
+                        </ul>
+                        
+                        <h5 class="text-primary mt-4 mb-3">WQI Classification</h5>
+                        <table class="table table-sm">
+                            <tr><td>0-25</td><td class="text-success">Excellent</td></tr>
+                            <tr><td>26-50</td><td class="text-info">Good</td></tr>
+                            <tr><td>51-75</td><td class="text-warning">Poor</td></tr>
+                            <tr><td>76-100</td><td class="text-danger">Very Poor</td></tr>
+                            <tr><td>>100</td><td class="text-dark">Unfit</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Results Section -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center" data-aos="fade-up">Research Results & Findings</h2>
+            
+            <!-- WQI Results -->
+            <div class="results-grid">
+                <div class="result-card" data-aos="zoom-in" data-aos-delay="100">
+                    <h5 class="text-primary">Turag River - Upstream</h5>
+                    <div class="wqi-score">84.4</div>
+                    <p class="text-danger fw-bold">Very Poor Quality</p>
+                    <small class="text-muted">Diyabari Point</small>
+                </div>
+                
+                <div class="result-card" data-aos="zoom-in" data-aos-delay="200">
+                    <h5 class="text-primary">Turag River - Downstream</h5>
+                    <div class="wqi-score">83.3</div>
+                    <p class="text-danger fw-bold">Very Poor Quality</p>
+                    <small class="text-muted">Aminbazar Point</small>
+                </div>
+                
+                <div class="result-card" data-aos="zoom-in" data-aos-delay="300">
+                    <h5 class="text-primary">Dhaleshwari - Upstream</h5>
+                    <div class="wqi-score">85.0</div>
+                    <p class="text-danger fw-bold">Very Poor Quality</p>
+                    <small class="text-muted">Bridge Point</small>
+                </div>
+                
+                <div class="result-card" data-aos="zoom-in" data-aos-delay="400">
+                    <h5 class="text-primary">Dhaleshwari - Downstream</h5>
+                    <div class="wqi-score">86.5</div>
+                    <p class="text-danger fw-bold">Very Poor Quality</p>
+                    <small class="text-muted">Kadamtoli Point</small>
+                </div>
+            </div>
+            
+            <!-- Key Findings -->
+            <div class="row mt-5">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <div class="project-card p-4 h-100">
+                        <h4 class="text-primary mb-3">
+                            <i class="fas fa-exclamation-triangle me-2"></i>Critical Parameters Exceeding Standards
+                        </h4>
+                        
+                        <h5 class="mb-3">Turag River Issues:</h5>
+                        <ul>
+                            <li><strong>Total Suspended Solids:</strong> 101-104 mg/L (Standard: 10 mg/L)</li>
+                            <li><strong>Turbidity:</strong> 39-45 NTU (Standard: 10 NTU)</li>
+                            <li><strong>Color:</strong> 27-29 Pt-Co (Standard: 15 Pt-Co)</li>
+                            <li><strong>COD:</strong> 10-11 mg/L (Standard: 4 mg/L)</li>
+                            <li><strong>Ammonia (Upstream):</strong> 1.19 mg/L (Standard: 0.5 mg/L)</li>
+                        </ul>
+                        
+                        <h5 class="mb-3 mt-4">Dhaleshwari River Issues:</h5>
+                        <ul>
+                            <li><strong>Total Suspended Solids:</strong> 143-177 mg/L (Standard: 10 mg/L)</li>
+                            <li><strong>Color:</strong> 33-42 Pt-Co (Standard: 15 Pt-Co)</li>
+                            <li><strong>COD:</strong> 7-9 mg/L (Standard: 4 mg/L)</li>
+                            <li><strong>Ammonia:</strong> 1.37-2.42 mg/L (Standard: 0.5 mg/L)</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6" data-aos="fade-left">
+                    <div class="project-card p-4 h-100">
+                        <h4 class="text-primary mb-3">
+                            <i class="fas fa-check-circle me-2"></i>Parameters Within Standards
+                        </h4>
+                        
+                        <h5 class="mb-3">Acceptable Levels Found:</h5>
+                        <ul>
+                            <li><strong>pH:</strong> 7.34-7.58 (Standard: 6.5-8.5)</li>
+                            <li><strong>Heavy Metals:</strong> All within safe limits</li>
+                            <li><strong>Hydrogen Sulfide:</strong> Below detection limits</li>
+                            <li><strong>Electrical Conductivity:</strong> Within acceptable range</li>
+                            <li><strong>Chloride Content:</strong> Normal levels detected</li>
+                        </ul>
+                        
+                        <h4 class="text-primary mb-3 mt-4">
+                            <i class="fas fa-lightbulb me-2"></i>Key Insights
+                        </h4>
+                        <ul>
+                            <li>Both rivers show "Very Poor" water quality (WQI 76-100)</li>
+                            <li>Water unsuitable for drinking without treatment</li>
+                            <li>Industrial pollution is the primary concern</li>
+                            <li>Dissolved oxygen critically low (0.3-0.56 mg/L)</li>
+                            <li>Aquatic life severely threatened</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Environmental Impact -->
+            <div class="row mt-4">
+                <div class="col-12" data-aos="fade-up">
+                    <div class="project-card p-4">
+                        <h4 class="text-primary mb-3">
+                            <i class="fas fa-leaf me-2"></i>Environmental Impact Assessment
+                        </h4>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h5 class="text-danger">Immediate Threats</h5>
+                                <ul>
+                                    <li>Aquatic life extinction risk</li>
+                                    <li>Public health hazards</li>
+                                    <li>Ecosystem degradation</li>
+                                    <li>Water supply contamination</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="text-warning">Pollution Sources</h5>
+                                <ul>
+                                    <li>Tannery industrial waste</li>
+                                    <li>Textile industry effluents</li>
+                                    <li>Municipal sewage discharge</li>
+                                    <li>Agricultural runoff</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <h5 class="text-success">Recommendations</h5>
+                                <ul>
+                                    <li>Immediate treatment required</li>
+                                    <li>Industrial waste regulation</li>
+                                    <li>Continuous monitoring</li>
+                                    <li>Public awareness campaigns</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications & Impact -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center" data-aos="fade-up">Research Impact & Recognition</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="project-card p-4 text-center h-100">
+                        <i class="fas fa-trophy text-warning fa-3x mb-3"></i>
+                        <h5>Academic Excellence</h5>
+                        <p>Thesis completed with distinction at BUET, recognized for comprehensive methodology and significant findings</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="project-card p-4 text-center h-100">
+                        <i class="fas fa-users text-info fa-3x mb-3"></i>
+                        <h5>Policy Implications</h5>
+                        <p>Research findings contribute to environmental policy discussions and water management strategies in Bangladesh</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="project-card p-4 text-center h-100">
+                        <i class="fas fa-microscope text-success fa-3x mb-3"></i>
+                        <h5>Technical Innovation</h5>
+                        <p>Advanced analytical techniques and comprehensive WQI methodology serve as reference for future studies</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Future Work -->
+    <section class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8" data-aos="fade-right">
+                    <h2 class="section-title">Future Research Directions</h2>
+                    <div class="project-card p-4">
+                        <h4 class="text-primary mb-3">Recommended Extensions</h4>
+                        <ul>
+                            <li><strong>Seasonal Monitoring:</strong> Long-term water quality assessment across different seasons</li>
+                            <li><strong>Biological Assessment:</strong> Aquatic life health and biodiversity studies</li>
+                            <li><strong>Treatment Solutions:</strong> Development of cost-effective water treatment technologies</li>
+                            <li><strong>Source Tracking:</strong> Advanced pollution source identification and quantification</li>
+                            <li><strong>Remediation Strategies:</strong> Implementation of river restoration programs</li>
+                            <li><strong>Smart Monitoring:</strong> IoT-based real-time water quality monitoring systems</li>
+                        </ul>
+                        
+                        <h4 class="text-primary mb-3 mt-4">Collaboration Opportunities</h4>
+                        <p>This research opens doors for collaboration with:</p>
+                        <ul>
+                            <li>Environmental protection agencies</li>
+                            <li>Municipal water management authorities</li>
+                            <li>Industrial pollution control boards</li>
+                            <li>International environmental organizations</li>
+                            <li>Academic institutions and research centers</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-4" data-aos="fade-left">
+                    <div class="project-card p-4">
+                        <h5 class="text-primary mt-4 mb-3">Contact Information</h5>
+                        <p><strong>Lead Researcher:</strong><br>
+                        Khandokar Md Rasel<br>
+                        <i class="fas fa-envelope me-2"></i>kmdrasel.buet@gmail.com<br>
+                        <i class="fas fa-phone me-2"></i>(+880) 1744452433</p>
+                        
+                        <p><strong>Institution:</strong><br>
+                        Department of Civil Engineering<br>
+                        Bangladesh University of Engineering and Technology</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-2">&copy; 2024 Water Quality Assessment Research Project</p>
+            <p class="mb-0">
+                <i class="fas fa-university me-2"></i>Bangladesh University of Engineering and Technology (BUET) |
+                <i class="fas fa-flask me-2"></i>Department of Civil Engineering
+            </p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+        
+        // Smooth scrolling for internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Add loading animation for download buttons
+        document.querySelectorAll('.btn-download').forEach(button => {
+            button.addEventListener('click', function() {
+                const originalText = this.innerHTML;
+                this.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Preparing Download...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.innerHTML = originalText;
+                    this.disabled = false;
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>
