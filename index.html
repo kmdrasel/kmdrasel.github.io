@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khandokar Md Rasel - Portfolio</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+		/* --- Preloader Styles --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #0d0d0d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease;
+        }
+        #preloader.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        #loadingText {
+            display: inline-block;
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            text-shadow: 0 0 10px #00ffe0, 0 0 20px #00ffe0, 0 0 30px #00ffe0;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        #loadingText.cursor::after {
+            content: '|';
+            display: inline-block;
+            margin-left: 2px;
+            color: #00ffe0;
+            animation: blinkCursor 0.7s steps(1) infinite;
+        }
+        @keyframes blinkCursor {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        .progress-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .progress-bar {
+            width: 300px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            transition: transform 0.2s ease;
+        }
+        .progress-bar.pop {
+            transform: scaleY(1.5);
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, #00ffe0, #00bfff, #00ffe0);
+            background-size: 200% 100%;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            0% { filter: drop-shadow(0 0 5px #00ffe0); }
+            100% { filter: drop-shadow(0 0 15px #00ffe0); }
+        }
+        .percentage {
+            font-size: 18px;
+            font-weight: bold;
+            min-width: 50px;
+            text-align: left;
+            transition: color 0.5s ease, transform 0.5s ease;
+        }
+        @keyframes flash {
+            0%, 100% { transform: scale(1); color: #00ffea; }
+            50% { transform: scale(1.4); color: #00ff66; }
+        }
+        .finished {
+            color: #00ff66 !important;
+            text-shadow: 0 0 15px #00ff66, 0 0 30px #00ff66, 0 0 45px #00ff66 !important;
+        }
+
+        /* --- Portfolio Styles --- */
+        :root {
+            --color-background: #111827; /* page background */
+            --color-surface: #1E293B; /* cards/panels */
+            --color-primary: #22D3EE; /* cyan primary */
+            --color-accent: #0EA5E9; /* accent blue */
+            --color-text-light: #F8FAFC; /* main text */
+            --color-text-muted: #A0AEC0; /* secondary text */
+            --color-hover: #1A56DB; /* hover state */
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--color-text-light);
+            background-color: var(--color-background);
+            scroll-behavior: smooth;
+        }
+
+        .navbar {
+            background: var(--color-surface);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.6);
+        }
+
+        .navbar-brand, .nav-link {
+            color: var(--color-text-light) !important;
+        }
+
+        .nav-link:hover {
+            color: var(--color-primary) !important;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(17, 24, 39, 0.9), rgba(17, 24, 39, 0.85)), 
+                        url('https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?ixlib=rb-4.0.3&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--color-text-light);
+            padding: 100px 0;
+            margin-top: 56px;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            position: relative;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            color: var(--color-primary);
+        }
+
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 80px;
+            height: 3px;
+            background: var(--color-accent);
+        }
+
+        .card {
+            border: none;
+            border-radius: 10px;
+            background: var(--color-surface);
+            color: var(--color-text-light);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 25px;
+            height: 100%;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+        }
+
+        .skill-badge {
+            background-color: rgba(34, 211, 238, 0.1);
+            color: var(--color-primary);
+            padding: 8px 15px;
+            border-radius: 50px;
+            margin: 5px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        /* --- Timeline Effect CSS --- */
+        .timeline {
+            position: relative;
+        }
+        .timeline-item {
+            position: relative; /* Establishes a positioning context for the line and dot */
+            padding-left: 40px; /* Creates space for the timeline elements */
+            padding-bottom: 30px; /* Space between timeline items */
+        }
+
+        /* The continuous vertical line */
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 8px; /* Position of the line */
+            top: 0;
+            width: 2px; /* Thickness of the line */
+            height: 100%; /* Makes the line continuous */
+            background-color: #e9ecef; /* Default light gray color */
+            transition: background-color 0.3s ease;
+        }
+
+        /* The dot on the timeline */
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 0; /* Aligns the dot with the line */
+            top: 5px; /* Vertical position of the dot */
+            height: 18px;
+            width: 18px;
+            background-color: #e9ecef; /* Default light gray color */
+            border: 3px solid #ffffff; /* Creates a "cutout" effect against the background */
+            border-radius: 50%;
+            transition: background-color 0.3s ease;
+            z-index: 1;
+        }
+        
+        /* --- Hover Effect --- */
+        /* Changes the color of the line and dot to blue on hover */
+        .timeline-item:hover::before,
+        .timeline-item:hover::after {
+            background-color: #007bff; /* Primary blue color */
+        }
+
+        /* Removes the bottom padding from the last item for a cleaner look */
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+		
+		.timeline .text-muted,
+        .card .text-muted {
+		    color: var(--color-text-muted) !important; /* Use theme variable and !important */
+		}
+
+        .contact-info a {
+            color: var(--color-text-muted);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .contact-info a:hover {
+            color: var(--color-primary);
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--color-primary);
+            color: var(--color-background);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            transition: transform 0.3s, background 0.3s;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px);
+            background: var(--color-hover);
+        }
+
+        .achievement-list li:before {
+            color: var(--color-primary);
+        }
+
+        .footer {
+            background: var(--color-surface);
+            color: var(--color-text-light);
+            padding: 30px 0;
+        }
+
+        @media (max-width: 768px) {
+            .hero {
+                padding: 70px 0;
+            }
+
+            .section {
+                padding: 60px 0;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+<!-- --- Preloader --- -->
+<div id="preloader">
+    <div id="loadingText" class="cursor"></div>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBarContainer">
+            <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+        <div class="percentage" id="percentage">0%</div>
+    </div>
+</div>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="#">Khandokar Md Rasel</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#project-research">Project & Research</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#education">Education</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#certifications">Certifications</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#leadership">Leadership</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#recommendations">Recommendations</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero text-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <img src="https://github.com/kmdrasel/kmdrasel.github.io/blob/6b48f31b928a93a8aff1772163a1228d4f33ad8b/rasel.jpg?raw=true" 
+                         class="rounded-circle mb-4" alt="Khandokar Md Rasel" style="width: 180px; height: 180px; object-fit: cover;">
+                    <h1 class="display-4 fw-bold mb-3">Khandokar Md Rasel</h1>
+                    <p class="lead mb-4">Civil Engineer & Data Science Enthusiast</p>
+                    <p class="mb-4">"Data is the new oil; it’s valuable, but if unrefined, it cannot really be used." – Clive Humby</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="https://www.linkedin.com/in/kmdrasel/" class="social-icon" target="_blank">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+						<a href="https://www.facebook.com/kmd.rasel.1" class="social-icon" target="_blank">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="mailto:kmdrasel.buet@gmail.com" class="social-icon">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="https://wa.me/8801521432816" class="social-icon" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="row">
+                <div class="col-lg-8 text-dark">
+                    <p class="lead">As an Engineer by foundation and a Data Scientist by ambition, I focus on transforming complex data into actionable insights to solve real-world engineering challenges.</p>
+                    <p>My thesis on the Water Quality Index of the Dhaleshwari and Turag Rivers, where I collected and analyzed extensive data, ignited my interest in data-driven solutions.</p>
+                    <p>Proficient in Python, Pandas, NumPy, Matplotlib, Statistics, EDA, Data Visualization, and Data Exploration, I leverage these skills to enhance decision-making and optimize operations in engineering projects.</p>
+                    <p>I am eager to connect with professionals and institutions that value innovation and seek to integrate data science into engineering practices for smarter, more sustainable solutions.</p>
+                </div>
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Personal Details</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><strong>Nationality:</strong> Bangladesh</li>
+                                <li class="mb-2"><strong>Date of Birth:</strong> 1 Apr 1996</li>
+                                <li class="mb-2"><strong>Place of Birth:</strong> Rangpur, Bangladesh</li>
+                                <li class="mb-2"><strong>Gender:</strong> Male</li>
+                                <li class="mb-2">
+                                    <strong>Phone:</strong> 
+                                    <div>(+880) 1744452433</div>
+                                    <div>(+880) 1521432816</div>
+                                </li>
+                                <li class="mb-2">
+                                    <strong>Email:</strong> kmdrasel.buet@gmail.com
+                                </li>
+                                <li>
+                                    <strong>Address:</strong> Uttum Betar Para, Uttum, HazirHat, Rangpur Sadar, 5400 Rangpur (Bangladesh)
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project & Research Section -->
+    <section id="project-research" class="section">
+        <div class="container">
+            <h2 class="section-title">Project & Research</h2>
+            
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">An Assessment of the Water Quality Index of the Dhaleshwari and Turag Rivers</h4>
+                    <h5 class="text-primary">Bangladesh University of Engineering and Technology (BUET)</h5>
+                    <p class="text-muted">March 2021 - March 2022</p>
+                    <p>This comprehensive study focuses on evaluating the surface water quality of two major rivers in Bangladesh - the Turag and Dhaleshwari rivers. The research aims to determine pollution levels through systematic analysis of physicochemical parameters and calculate Water Quality Index (WQI) values to assess water suitability for various uses.</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h5>Key Features:</h5>
+                            <ul>
+                                <li>Analysis of 19 water quality parameters</li>
+                                <li>4 strategic sampling locations</li>
+                                <li>Advanced laboratory techniques</li>
+                                <li>Comprehensive WQI methodology</li>
+                                <li>Environmental impact assessment</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Research Findings:</h5>
+                            <ul>
+                                <li>Average WQI score: 84.7 (Very Poor quality)</li>
+                                <li>Critical parameters exceeding standards</li>
+                                <li>Industrial pollution as primary concern</li>
+                                <li>Aquatic life severely threatened</li>
+                                <li>Immediate remediation needed</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <a href="Project%20&%20Research.html" class="btn btn-primary btn-lg" target="_blank">View Detailed Research</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+	<!-- Experience Section -->
+	<section id="experience" class="section bg-light">
+		<div class="container">
+			<h2 class="section-title">Work Experience</h2>
+			
+			<!-- First Experience - Current -->
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="d-flex justify-content-between align-items-center mb-3">
+						<h4 class="card-title mb-0">Senior Engineer and IT Manager</h4>
+						<span class="badge bg-primary">Current</span>
+					</div>
+					<h5 class="text-primary">Hasan Worldwide Holdings Ltd.</h5>
+					<p class="text-muted mb-3">Purbachal, Narayanganj, Dhaka, Bangladesh | <a href="https://www.hwhl-ltd.com" target="_blank">Website</a></p>
+					<p>A Bangladeshi construction and real estate company involved in major government and private projects.</p>
+					<p><strong>Responsibilities:</strong></p>
+					<ul>
+						<li>Monitoring government e-tender platforms, handling online submissions, and performing BOQ data checking and cost analysis for project bids.</li>
+						<li>Overseeing setup and maintenance of company IT infrastructure, including computers, printers, and networks to ensure smooth operations.</li>
+						<li>Managing the company website, social media pages, and online advertisements to enhance digital presence and client engagement.</li>
+						<li>Organizing and maintaining company databases, employee records, and financial data, while preparing digital reports and ensuring data security.</li>
+						<li>Handling all project and customer data including flat sales, cost tracking, materials usage, and client information.</li>
+						<li>Set up the company's custom domain (hwhl-ltd.com), configured DNS, MX, SPF, and DKIM, and created official email accounts.</li>
+						<li>Built the company website and managed domain services through Squarespace, resolving email and domain authentication issues.</li>
+					</ul>
+				</div>
+			</div>
+			
+			<!-- Second Experience - Jan 2024 – Nov 2024 -->
+			<div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 class="card-title mb-0">Mathematics Tutor (Part-Time)</h4>
+                        <span class="badge bg-secondary">Jan 2024 – Nov 2024</span>
+                    </div>
+                    <h5 class="text-primary">Self-Employed / Coaching Centers</h5>
+                    <p class="text-muted mb-3">Dhaka, Bangladesh</p>
+                    <p>Worked as a mathematics tutor helping students strengthen their skills in grades 9 to 12, teaching small groups and handling part-time classes at well-known coaching centers.</p>
+                    <p><strong>Responsibilities:</strong></p>
+                    <ul>
+                        <li>Tutoring students in mathematics at the secondary and higher secondary levels.</li>
+                        <li>Teaching small groups of about 3 to 10 students per batch.</li>
+                        <li>Helping students improve problem-solving techniques and academic performance.</li>
+                    </ul>
+                    <a href="https://is.gd/o2aSch" class="btn btn-sm btn-outline-primary mt-2" target="_blank">View Details</a>
+                </div>
+            </div>
+		</div>
+	</section>
+
+    <!-- Education Section -->
+    <section id="education" class="section">
+        <div class="container">
+            <h2 class="section-title">Education</h2>
+            
+            <div class="timeline">
+                <!-- BUET -->
+                <div class="timeline-item">
+                    <h4>B.Sc. in Civil Engineering</h4>
+                    <h5 class="text-primary">Bangladesh University of Engineering and Technology (BUET)</h5>
+                    <p class="text-muted">Dhaka, Bangladesh</p>
+                    <p><strong>Thesis:</strong> Water Quality Index of the Dhaleshwari and Turag Rivers</p>
+                    <a href="https://www.buet.ac.bd/" class="btn btn-sm btn-outline-primary mt-2" target="_blank">University Website</a>
+                </div>
+                
+                <!-- HSC -->
+                <div class="timeline-item">
+                    <h4>Higher Secondary Certificate (HSC)</h4>
+                    <h5 class="text-primary">Cantonment Public School and College, Rangpur</h5>
+                    <p class="text-muted">Rangpur, Bangladesh</p>
+                    <p><strong>Field of Study:</strong> Science</p>
+                    <p><strong>Awards:</strong> HSC Governor's Award (Merit Scholarship)</p>
+                    <a href="http://cpscr.edu.bd/" class="btn btn-sm btn-outline-primary mt-2" target="_blank">College Website</a>
+                </div>
+                
+                <!-- SSC -->
+                <div class="timeline-item">
+                    <h4>Secondary School Certificate (SSC)</h4>
+                    <h5 class="text-primary">Rangpur Zilla School</h5>
+                    <p class="text-muted">Rangpur, Bangladesh</p>
+                    <p><strong>Field of Study:</strong> Science</p>
+                    <p><strong>Awards:</strong> SSC Governor's Award (Merit Scholarship)</p>
+                    <a href="http://rzschool.edu.bd" class="btn btn-sm btn-outline-primary mt-2" target="_blank">School Website</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+	<!-- Skills Section -->
+	<section id="skills" class="section bg-light">
+		<div class="container">
+			<h2 class="section-title">Skills</h2>
+			
+			<div class="row">
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">Data Science & Analytics</h4>
+							<div class="mb-3">
+								<span class="skill-badge">Python</span>
+								<span class="skill-badge">Pandas</span>
+								<span class="skill-badge">NumPy</span>
+								<span class="skill-badge">Matplotlib</span>
+								<span class="skill-badge">Seaborn</span>
+								<span class="skill-badge">Scikit-learn (Basic)</span>
+								<span class="skill-badge">Statistics</span>
+								<span class="skill-badge">EDA</span>
+								<span class="skill-badge">Data Visualization</span>
+								<span class="skill-badge">Data Exploration</span>
+								<span class="skill-badge">Data Collection</span>
+								<span class="skill-badge">Data Cleaning</span>
+								<span class="skill-badge">Data Processing</span>
+								<span class="skill-badge">Data Wrangling</span>
+								<span class="skill-badge">Regression</span>
+								<span class="skill-badge">Sampling</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">Programming & Software</h4>
+							<div class="mb-3">
+								<span class="skill-badge">MATLAB</span>
+								<span class="skill-badge">SQL</span>
+								<span class="skill-badge">C/C++/C# (Basic)</span>
+								<span class="skill-badge">Git</span>
+								<span class="skill-badge">GitHub</span>
+								<span class="skill-badge">HTML</span>
+								<span class="skill-badge">CSS</span>
+								<span class="skill-badge">JavaScript</span>
+								<span class="skill-badge">Bootstrap</span>
+								<span class="skill-badge">Microsoft Office</span>
+								<span class="skill-badge">AutoCAD</span>
+								<span class="skill-badge">ETABS</span>
+								<span class="skill-badge">SAP2000</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="row mt-4">
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">IT & Web Management</h4>
+							<div class="mb-3">
+								<span class="skill-badge">Squarespace</span>
+								<span class="skill-badge">DNS Configuration</span>
+								<span class="skill-badge">Email Setup (MX/SPF/DKIM)</span>
+								<span class="skill-badge">Google Workspace</span>
+								<span class="skill-badge">Zoho Mail</span>
+								<span class="skill-badge">Networking</span>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-md-6">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title">Engineering & Analysis</h4>
+							<div class="mb-3">
+								<span class="skill-badge">BOQ Review</span>
+								<span class="skill-badge">Cost Estimation</span>
+								<span class="skill-badge">Basic Structural Analysis</span>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="section">
+        <div class="container">
+            <h2 class="section-title">Certifications & Awards</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Associate Data Scientist in Python</h4>
+                            <h5 class="text-primary">DataCamp, Inc. | 2025</h5>
+                            <p class="text-muted">New York, United States</p>
+                            <p><strong>Skills:</strong> Python, NumPy, Matplotlib, Pandas, Statistics, Data Visualization, Importing and Cleaning Data, Data Communication, Categorical Data, Functions and Writing Functions, Regression with statsmodels, Sampling</p>
+                            <a href="https://www.datacamp.com" class="btn btn-sm btn-outline-primary mt-2" target="_blank">Website</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Spoken English and Phonetics</h4>
+                            <h5 class="text-primary">Mentors', Dhaka | Sep 2023 – Nov 2023</h5>
+                            <p>Improved spoken English, phonetics, and presentation skills; secured 90% marks and ranked 1st among all students.</p>
+                            <a href="https://is.gd/X9Yy7w" class="btn btn-sm btn-outline-primary mt-2" target="_blank">View Certificate</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Youth Leadership Bootcamp</h4>
+                            <h5 class="text-primary">Bangladesh Youth Leadership Center (BYLC) | Feb 2017</h5>
+                            <p>Selected as one of 50 participants through a rigorous application process with a 15% acceptance rate.</p>
+                            <p>Five-day leadership workshop based on a Harvard-designed curriculum focusing on critical thinking, problem-solving, and communication skills.</p>
+                            <a href="https://is.gd/TKI451" class="btn btn-sm btn-outline-primary mt-2" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">University Admission Test Excellency Scholarship</h4>
+                            <h5 class="text-primary">2014</h5>
+                            <p>Awarded for outstanding performance in university admission tests.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leadership Section -->
+    <section id="leadership" class="section bg-light">
+        <div class="container">
+            <h2 class="section-title">Leadership & Activities</h2>
+            
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Buet Career Club</h4>
+                            <h5 class="text-primary">Assistant Secretary of Public and Private Job</h5>
+                            <p>The Buet Career Club focuses on the development of students' lives and careers.</p>
+                            <p><strong>Achievements:</strong></p>
+                            <ul>
+                                <li>Organized the Women's Engineering Congress 2016</li>
+                                <li>Organized the Engineering Olympiad</li>
+                            </ul>
+                            <a href="https://is.gd/DNOolt" class="btn btn-sm btn-outline-primary mt-2" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Sports Achievements</h4>
+                            <p><strong>2016:</strong></p>
+                            <ul class="achievement-list">
+                                <li>Champion, Inter Hall Badminton Tournament, BUET</li>
+                                <li>Champion, Sher-e-Bangla Hall Cricket Tournament</li>
+                                <li>Champion, Sher-e-Bangla Hall Badminton Tournament</li>
+                                <li>Champion, Inter-Hall Batch Party Table Tennis Tournament</li>
+                                <li>Champion, Inter-Hall Batch Party e-sports contests in NFS Most Wanted, FIFA, and Call of Duty</li>
+                            </ul>
+                            
+                            <p class="mt-3"><strong>2015:</strong></p>
+                            <ul class="achievement-list">
+                                <li>Champion, Inter Hall Badminton Tournament, BUET</li>
+                                <li>Champion, Inter Hall Football Tournament, BUET</li>
+                                <li>Champion, Inter-University e-sports NFS Most Wanted Gaming Tournament</li>
+                                <li>Champion, Sher-e-Bangla Hall Badminton Tournament</li>
+                            </ul>
+                            <a href="https://is.gd/y1wStS" class="btn btn-sm btn-outline-primary mt-2" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Singing</h4>
+                            <p>Enjoy participating in local singing competitions and events.</p>
+                            <a href="https://is.gd/NdAkpN" class="btn btn-sm btn-outline-primary mt-2" target="_blank">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <h4 class="card-title">Conferences</h4>
+                            <h5 class="text-primary">Data Science Innovation Summit, UK | October 2024</h5>
+                            <p>Attendee, Virtual Conference (hosted from London, UK)</p>
+                            <p>Attended workshops on big data, deep learning, and data visualization, enhancing my grasp of data science & AI.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section id="recommendations" class="section">
+        <div class="container">
+            <h2 class="section-title">Recommendations</h2>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. Md. Habibur Rahman</h4>
+                            <h5 class="text-primary">Adviser</h5>
+                            <p>Professor, Dept. of Civil Engineering, BUET</p>
+                            <p>Ex-Chairman of the Dhaka Water Supply and Sewerage Authority (DWASA) Board</p>
+                            <p>Ex-Pro Vice-Chancellor of BUET</p>
+                            <p class="mb-1"><strong>Email:</strong> habibr@ce.buet.ac.bd</p>
+                            <p class="mb-1"><a href="https://ce.buet.ac.bd/profile-of-md-habibur-rahman/" target="_blank">Profile Link</a></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h4 class="card-title">Dr. Rowshan Mamtaz</h4>
+                            <h5 class="text-primary">Thesis Supervisor</h5>
+                            <p>Professor, Dept. of Civil Engineering, BUET</p>
+                            <p class="mb-1"><strong>Email:</strong> mamtaz@ce.buet.ac.bd</p>
+                            <p><a href="https://ce.buet.ac.bd/profile-of-rowshan-mamtaz/" target="_blank">Profile Link</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+	<!-- Contact Section -->
+	<section id="contact" class="section bg-light">
+		<div class="container">
+			<h2 class="section-title">Contact Me</h2>
+			
+			<div class="row">
+				<div class="col-lg-6 mb-4">
+					<div class="card h-100">
+						<div class="card-body">
+							<h4 class="card-title mb-4">Get In Touch</h4>
+							<div class="contact-info">
+								<div class="d-flex align-items-start mb-3">
+									<i class="fas fa-phone-alt me-3 mt-1 text-primary"></i>
+									<div>
+										<h5>Phone</h5>
+										<p>(+880) 1744452433<br>(+880) 1521432816</p>
+									</div>
+								</div>
+								
+								<div class="d-flex align-items-start">
+									<i class="fab fa-whatsapp me-3 mt-1 text-success"></i>
+									<div>
+										<h5>WhatsApp</h5>
+										<p><a href="https://wa.me/8801521432816" target="_blank">+8801521432816</a></p>
+									</div>
+								</div>
+								
+								<div class="d-flex align-items-start mb-3">
+									<i class="fas fa-envelope me-3 mt-1 text-primary"></i>
+									<div>
+										<h5>Email</h5>
+										<p><a href="mailto:kmdrasel.buet@gmail.com">kmdrasel.buet@gmail.com</a></p>
+									</div>
+								</div>
+								
+								<div class="d-flex align-items-start mb-3">
+									<i class="fas fa-map-marker-alt me-3 mt-1 text-primary"></i>
+									<div>
+										<h5>Address</h5>
+										<p>Uttum Betar Para, Uttum, HazirHat, Rangpur Sadar, 5400 Rangpur (Bangladesh)</p>
+									</div>
+								</div>
+								
+								<div class="d-flex align-items-start">
+									<i class="fab fa-linkedin me-3 mt-1 text-primary"></i>
+									<div>
+										<h5>LinkedIn</h5>
+										<p><a href="https://www.linkedin.com/in/kmdrasel/" target="_blank">linkedin.com/in/kmdrasel</a></p>
+									</div>
+								</div>
+								
+								<div class="d-flex align-items-start">
+									<i class="fab fa-facebook-f me-3 mt-1 text-primary"></i>
+									<div>
+										<h5>Facebook</h5>
+										<p><a href="https://www.facebook.com/kmd.rasel.1" target="_blank">facebook.com/kmd.rasel.1</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+				<div class="col-lg-6">
+					<div class="card">
+						<div class="card-body">
+							<h4 class="card-title mb-4">Send a Message</h4>
+							<form id="contactForm" action="https://formspree.io/f/xblaknag" method="POST">
+								<div class="mb-3">
+									<label for="name" class="form-label">Your Name</label>
+									<input type="text" class="form-control" name="name" id="name" placeholder="Enter your name" required>
+								</div>
+								<div class="mb-3">
+									<label for="email" class="form-label">Email Address</label>
+									<input type="email" class="form-control" name="_replyto" id="email" placeholder="Enter your email" required>
+								</div>
+								<div class="mb-3">
+									<label for="subject" class="form-label">Subject</label>
+									<input type="text" class="form-control" name="subject" id="subject" placeholder="Enter subject" required>
+								</div>
+								<div class="mb-3">
+									<label for="message" class="form-label">Message</label>
+									<textarea class="form-control" name="message" id="message" rows="5" placeholder="Enter your message" required></textarea>
+								</div>
+								<button type="submit" class="btn btn-primary">Send Message</button>
+							</form>
+							<div id="formAlert" class="mt-3"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script>
+		const form = document.getElementById('contactForm');
+		const alertBox = document.getElementById('formAlert');
+
+		form.addEventListener('submit', async (e) => {
+			e.preventDefault();
+			const formData = new FormData(form);
+
+			try {
+				const response = await fetch(form.action, {
+					method: 'POST',
+					body: formData,
+					headers: { 'Accept': 'application/json' }
+				});
+
+				if (response.ok) {
+					alertBox.innerHTML = '<div class="alert alert-success">Message sent successfully!</div>';
+					form.reset();
+				} else {
+					alertBox.innerHTML = '<div class="alert alert-danger">Oops! Something went wrong.</div>';
+				}
+			} catch (error) {
+				alertBox.innerHTML = '<div class="alert alert-danger">Failed to send message.</div>';
+			}
+		});
+	</script>
+
+    <!-- Footer -->
+    <footer class="footer text-center">
+        <div class="container">
+            <h3 class="mb-3">Khandokar Md Rasel</h3>
+            <p class="mb-4">Civil Engineer & Data Science Enthusiast</p>
+            <div class="d-flex justify-content-center gap-3 mb-4">
+                <a href="https://www.linkedin.com/in/kmdrasel/" class="social-icon" target="_blank">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+				<a href="https://www.facebook.com/kmd.rasel.1" class="social-icon" target="_blank">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="mailto:kmdrasel.buet@gmail.com" class="social-icon">
+                    <i class="fas fa-envelope"></i>
+                </a>
+				<a href="https://wa.me/8801521432816" class="social-icon" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+            </div>
+            <p class="mb-0">&copy; 2025 Khandokar Md Rasel. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- --- Preloader Script --- -->
+<script>
+    const text = "Loading my brain... just polishing the pixels";
+    const loadingText = document.getElementById("loadingText");
+    const percentage = document.getElementById("percentage");
+    const progressBar = document.getElementById("progressBar");
+    const progressBarContainer = document.getElementById("progressBarContainer");
+    const preloader = document.getElementById("preloader");
+
+    const duration = 5000; // 5 seconds
+    const totalChars = text.length;
+    let start = null;
+
+    function animate(timestamp) {
+      if (!start) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+
+      const value = Math.floor(progress * 100);
+      percentage.textContent = value + "%";
+      progressBar.style.width = `${value}%`;
+      const charsToShow = Math.floor(progress * totalChars);
+      loadingText.textContent = text.slice(0, charsToShow);
+
+      if (progress < 1) {
+        requestAnimationFrame(animate);
+      } else {
+        percentage.textContent = "100%";
+        percentage.style.animation = "flash 1s ease";
+        loadingText.classList.add("finished");
+        loadingText.classList.remove("cursor");
+        progressBarContainer.classList.add("pop");
+        setTimeout(() => progressBarContainer.classList.remove("pop"), 200);
+
+        setTimeout(() => {
+          preloader.classList.add("fade-out");
+          setTimeout(() => preloader.style.display = "none", 1000);
+        }, 1000);
+      }
+    }
+
+    requestAnimationFrame(animate);
+</script>
+</body>
+</html>
